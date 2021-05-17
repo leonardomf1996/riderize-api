@@ -1,0 +1,98 @@
+Create User - POST http://localhost:3333/users
+
+   Rota para a criação de um usuário
+   Por JSON, informar o nome (name), email e password (senha)
+   Ex: {
+	      "name": "Leonardo Mendes",
+	      "email": "leonardomendes@gmail.com",
+	      "password": "123456"
+       }
+   Não é aceito emails já cadastrados
+   Resposta esperada utilizando o exemplo acima:
+   Status code = 200
+   {
+      "user": {
+         "name": "Leonardo Mendes",
+         "email": "leonardomendes@gmail.com",
+         "id": "480f5725-adb3-44ef-b371-6c20907b6d0a",
+         "created_at": "2021-04-06T15:37:08.513Z",
+         "updated_at": "2021-04-06T15:37:08.513Z"
+      }
+   }
+
+
+Create Session - POST http://localhost:3333/sessions
+
+   Rota para login de um usuário
+   Por JSON, informar o email e password (senha)
+   Ex: {
+	      "email": "leonardomendes@gmail.com",
+	      "password": "123456"
+       }
+   Utilizar email e password já cadastrados
+   Resposta esperada utilizando o exemplo acima:
+   Status code = 200
+   {
+      "user": {
+         "id": "e50b9890-9218-4db1-8679-7d3223de42de",
+         "name": "Leonardo",
+         "email": "leonardo@gmail.com",
+         "created_at": "2021-04-05T17:08:04.875Z",
+         "updated_at": "2021-04-06T15:46:36.598Z"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MTc4MjAxNjMsImV4cCI6MTYxNzkwNjU2Mywic3ViIjoiZTUwYjk4OTAtOTIxOC00ZGIxLTg2NzktN2QzMjIzZGU0MmRlIn0.7zUJhwiWFWC6t5NfTexBkV2tT0c36xQkvS8JeDq3dyo"
+   }
+
+
+Show Profile - GET http://localhost:3333/profile
+
+   Rota para exibir os dados de um usuário através de seu token
+   Necessário utilizar a rota Create Session para gerar um token
+   Não é necessário informar via JSON, entretanto deve-se informar o token Bearer
+   Resposta esperada utilizando o exemplo acima:
+   Status code = 200
+   {
+      "id": "e50b9890-9218-4db1-8679-7d3223de42de",
+      "name": "Leonardo",
+      "email": "leonardo@gmail.com",
+      "created_at": "2021-04-05T17:08:04.875Z",
+      "updated_at": "2021-04-06T15:46:36.598Z"
+   }
+
+
+Update profile - PUT http://localhost:3333/profile
+
+   Rota para alterar os dados de um usuário
+   Necessário utilizar a rota Create Session para gerar um token
+   Necessário informar via JSON, passando os dados que você deseja alterar. Caso queira alterar o password, informar a antiga e a nova. Deve-se informar o token Bearer também
+   Resposta esperada utilizando o exemplo acima:
+   Status code = 200
+   {
+      "name": "Leonardo",
+      "email": "leonardo@gmail.com",
+      "old_password": "123456",
+      "password": "123123"
+   }
+
+
+Forgot password - POST http://localhost:3333/password/forgot
+
+   Rota para pedido de alteração de senha utilizando envio de email
+   Necessário informar via JSON, passando o email.
+   Resposta esperada utilizando o exemplo acima:
+   Status code = 204
+   Será gerado um link no terminal para o Ethereal, onde será mostrado o template do email. No template, existirá uma âncora escrito "Resetar minha senha". Clicando nele, será redirecionado para uma página vazia, e a URL conterá o token gerado
+
+
+Reset password - POST http://localhost:3333/password/reset
+
+   Rota para alterar a senha do usuário atráves de envio de email
+   Necessário utilizar a rota Forgot password.
+   Capture o token gerado pela rota Forgot password.
+   Necessário informar via JSON o novo password e o token gerado
+   Ex: {
+	      "password": "1234567890"
+	      "token": "c3b2bd67-2dc0-4edf-b9a9-514ee7bf0a5e",
+       }
+   Resposta esperada utilizando o exemplo acima:
+   Status code = 204
